@@ -1,0 +1,28 @@
+{
+  "name": "점심파티",
+  "short_name": "점심파티",
+  "description": "회사 동료와 점심 파티를 만들고 참여하는 실시간 웹앱",
+  "start_url": "/lunch-party/",
+  "scope": "/lunch-party/",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
