@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == uid;
+    }
+
+    match /parties/{partyId} {
+      allow read: if request.auth != null;
+
+      // 파티 생성: 호스트 본인만, currentMembers에는 자기 자신 1명만
+      allow create: if request.auth != null
+        && request.resource.data.hostUid == request.auth.uid
+        && request.resource.data.currentMembers.size() == 1
+        && request.resource.data.currentMembers[0].uid == request.auth.uid
+        && request.resource.data.maxMembers >= 2
+        && request.resource.data.maxMembers <= 8;
+
+      // 파티 수정: 호스트는 모든 필드, 비호스트는 자기 자신을 추가/제거만
+      allow update: if request.auth != null
+        && (
+          request.auth.uid == resource.data.hostUid
+          || isSelfJoin()
+          || isSelfLeave()
+        );
+
+      allow delete: if request.auth.uid == resource.data.hostUid;
+
+      // 비호스트가 수정 가능한 필드를 currentMembers, status로 제한
+      function touchesOnlyMembership() {
+        return request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['currentMembers', 'status']);
+      }
+
+      // 기존 참여자 uid 목록
+      function memberUidsBefore() {
+        return resource.data.currentMembers.map(m, m.uid);
+      }
+
+      // 변경 후 참여자 uid 목록
+      function memberUidsAfter() {
+        return request.resource.data.currentMembers.map(m, m.uid);
+      }
+
+      // 본인 참여: 정확히 1명 증가, 정원 초과 X, 본인이 새로 추가됨
+      function isSelfJoin() {
+        return touchesOnlyMembership()
+          && request.resource.data.currentMembers.size()
+             == resource.data.currentMembers.size() + 1
+          && request.resource.data.currentMembers.size()
+             <= resource.data.maxMembers
+          && !(request.auth.uid in memberUidsBefore())
+          && (request.auth.uid in memberUidsAfter());
+      }
+
+      // 본인 참여 취소: 정확히 1명 감소, 본인이 제거됨
+      function isSelfLeave() {
+        return touchesOnlyMembership()
+          && request.resource.data.currentMembers.size()
+             == resource.data.currentMembers.size() - 1
+          && (request.auth.uid in memberUidsBefore())
+          && !(request.auth.uid in memberUidsAfter());
+      }
+    }
+  }
+}
