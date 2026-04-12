@@ -25,8 +25,8 @@ const PartyCard = ({ party }) => {
       to={`/party/${party.id}`}
       className="block bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md hover:-translate-y-0.5 transition"
     >
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-2 text-sm text-gray-600 min-w-0">
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="flex items-center gap-1.5 text-sm text-gray-600 min-w-0">
           <span className="font-medium text-gray-900 truncate">
             {party.restaurantName}
           </span>
@@ -35,16 +35,16 @@ const PartyCard = ({ party }) => {
         <Badge variant={STATUS_VARIANT[status]}>{STATUS_LABEL[status]}</Badge>
       </div>
 
-      <h3 className="text-base font-semibold text-gray-900 line-clamp-2 mb-3">
+      <h3 className="text-base font-semibold text-gray-900 line-clamp-2 break-all mb-3">
         {party.title}
       </h3>
 
-      <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
-        <span className="inline-flex items-center gap-1">
-          <span>🕛</span>
-          <span>{formatMeetingTime(party.meetingTime)}</span>
+      <div className="flex items-center justify-between gap-2 text-sm text-gray-600 mb-3">
+        <span className="inline-flex items-center gap-1 min-w-0">
+          <span className="shrink-0">🕛</span>
+          <span className="truncate">{formatMeetingTime(party.meetingTime)}</span>
         </span>
-        <span className="text-gray-500">
+        <span className="shrink-0 text-gray-500">
           {currentCount}/{party.maxMembers}명
         </span>
       </div>

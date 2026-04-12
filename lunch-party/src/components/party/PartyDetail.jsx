@@ -126,26 +126,26 @@ const PartyDetail = ({ party }) => {
       </button>
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <div className="flex items-start justify-between gap-3 mb-4">
+        <div className="flex items-start justify-between gap-2 mb-4">
           <div className="min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-1.5 mb-1">
               <span className="text-sm font-medium text-gray-900 truncate">
                 {party.restaurantName}
               </span>
               <Badge variant="brand">{party.restaurantCategory}</Badge>
             </div>
-            <h1 className="text-xl font-bold text-gray-900">{party.title}</h1>
+            <h1 className="text-xl font-bold text-gray-900 break-all">{party.title}</h1>
           </div>
           <Badge variant={STATUS_VARIANT[status]}>{STATUS_LABEL[status]}</Badge>
         </div>
 
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700 mb-4">
-          <div className="flex items-center gap-2">
-            <dt className="text-gray-500">🕛 만남 시각</dt>
-            <dd>{formatMeetingTime(party.meetingTime)}</dd>
+          <div className="flex items-center gap-2 min-w-0">
+            <dt className="shrink-0 text-gray-500">🕛 만남 시각</dt>
+            <dd className="truncate">{formatMeetingTime(party.meetingTime)}</dd>
           </div>
-          <div className="flex items-center gap-2">
-            <dt className="text-gray-500">📍 위치</dt>
+          <div className="flex items-center gap-2 min-w-0">
+            <dt className="shrink-0 text-gray-500">📍 위치</dt>
             <dd className="truncate">{party.location}</dd>
           </div>
         </dl>

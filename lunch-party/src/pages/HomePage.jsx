@@ -49,17 +49,17 @@ const HomePage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 py-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="min-w-0">
             <h1 className="text-xl font-bold text-gray-900">오늘의 점심 파티</h1>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 truncate">
               마음에 드는 파티에 참여하거나 직접 만들어보세요
             </p>
           </div>
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-1 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition"
+            className="inline-flex items-center gap-1 shrink-0 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition whitespace-nowrap"
           >
             + 파티 만들기
           </button>
