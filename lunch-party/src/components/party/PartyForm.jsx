@@ -238,7 +238,7 @@ const PartyForm = ({ onClose }) => {
                 type="time"
                 value={form.meetingTime}
                 onChange={update("meetingTime")}
-                className="w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full appearance-none bg-white rounded-lg border border-gray-300 px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
             <div>
