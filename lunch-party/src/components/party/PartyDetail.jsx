@@ -140,9 +140,9 @@ const PartyDetail = ({ party }) => {
         </div>
 
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700 mb-4">
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2">
             <dt className="shrink-0 text-gray-500">🕛 만남 시각</dt>
-            <dd className="truncate">{formatMeetingTime(party.meetingTime)}</dd>
+            <dd className="whitespace-nowrap">{formatMeetingTime(party.meetingTime)}</dd>
           </div>
           <div className="flex items-center gap-2 min-w-0">
             <dt className="shrink-0 text-gray-500">📍 위치</dt>

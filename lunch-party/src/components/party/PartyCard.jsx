@@ -40,9 +40,9 @@ const PartyCard = ({ party }) => {
       </h3>
 
       <div className="flex items-center justify-between gap-2 text-sm text-gray-600 mb-3">
-        <span className="inline-flex items-center gap-1 min-w-0">
-          <span className="shrink-0">🕛</span>
-          <span className="truncate">{formatMeetingTime(party.meetingTime)}</span>
+        <span className="inline-flex items-center gap-1 whitespace-nowrap">
+          <span>🕛</span>
+          <span>{formatMeetingTime(party.meetingTime)}</span>
         </span>
         <span className="shrink-0 text-gray-500">
           {currentCount}/{party.maxMembers}명
