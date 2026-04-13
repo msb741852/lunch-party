@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  arrayRemove,
-  arrayUnion,
-  deleteDoc,
-  doc,
-  runTransaction,
-} from "firebase/firestore";
+import { deleteDoc, doc, runTransaction } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { db } from "../../firebase";
 import { useAuthStore } from "../../store/useAuthStore";
@@ -58,10 +52,12 @@ const PartyDetail = ({ party }) => {
           displayName: user.displayName ?? "익명",
           photoURL: user.photoURL ?? "",
         };
-        const nextLength = members.length + 1;
+        const nextMembers = [...members, me];
+        const nextUids = [...(data.memberUids ?? []), user.uid];
         transaction.update(ref, {
-          currentMembers: arrayUnion(me),
-          status: nextLength >= data.maxMembers ? "full" : "open",
+          currentMembers: nextMembers,
+          memberUids: nextUids,
+          status: nextMembers.length >= data.maxMembers ? "full" : "open",
         });
       });
       toast.success("파티에 참여했어요!");
@@ -82,10 +78,13 @@ const PartyDetail = ({ party }) => {
         const snapshot = await transaction.get(ref);
         if (!snapshot.exists()) throw new Error("파티가 존재하지 않아요");
         const data = snapshot.data();
-        const me = (data.currentMembers ?? []).find((m) => m.uid === user.uid);
-        if (!me) throw new Error("참여 정보가 없어요");
+        const members = data.currentMembers ?? [];
+        if (!members.some((m) => m.uid === user.uid)) {
+          throw new Error("참여 정보가 없어요");
+        }
         transaction.update(ref, {
-          currentMembers: arrayRemove(me),
+          currentMembers: members.filter((m) => m.uid !== user.uid),
+          memberUids: (data.memberUids ?? []).filter((uid) => uid !== user.uid),
           status: "open",
         });
       });

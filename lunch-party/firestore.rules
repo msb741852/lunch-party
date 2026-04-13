@@ -14,6 +14,8 @@ service cloud.firestore {
         && request.resource.data.hostUid == request.auth.uid
         && request.resource.data.currentMembers.size() == 1
         && request.resource.data.currentMembers[0].uid == request.auth.uid
+        && request.resource.data.memberUids.size() == 1
+        && request.resource.data.memberUids[0] == request.auth.uid
         && request.resource.data.maxMembers >= 2
         && request.resource.data.maxMembers <= 8;
 
@@ -27,20 +29,10 @@ service cloud.firestore {
 
       allow delete: if request.auth.uid == resource.data.hostUid;
 
-      // 비호스트가 수정 가능한 필드를 currentMembers, status로 제한
+      // 비호스트가 수정 가능한 필드를 currentMembers, memberUids, status로 제한
       function touchesOnlyMembership() {
         return request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['currentMembers', 'status']);
-      }
-
-      // 기존 참여자 uid 목록
-      function memberUidsBefore() {
-        return resource.data.currentMembers.map(m, m.uid);
-      }
-
-      // 변경 후 참여자 uid 목록
-      function memberUidsAfter() {
-        return request.resource.data.currentMembers.map(m, m.uid);
+          .hasOnly(['currentMembers', 'memberUids', 'status']);
       }
 
       // 본인 참여: 정확히 1명 증가, 정원 초과 X, 본인이 새로 추가됨
@@ -50,8 +42,8 @@ service cloud.firestore {
              == resource.data.currentMembers.size() + 1
           && request.resource.data.currentMembers.size()
              <= resource.data.maxMembers
-          && !(request.auth.uid in memberUidsBefore())
-          && (request.auth.uid in memberUidsAfter());
+          && !(request.auth.uid in resource.data.memberUids)
+          && (request.auth.uid in request.resource.data.memberUids);
       }
 
       // 본인 참여 취소: 정확히 1명 감소, 본인이 제거됨
@@ -59,8 +51,8 @@ service cloud.firestore {
         return touchesOnlyMembership()
           && request.resource.data.currentMembers.size()
              == resource.data.currentMembers.size() - 1
-          && (request.auth.uid in memberUidsBefore())
-          && !(request.auth.uid in memberUidsAfter());
+          && (request.auth.uid in resource.data.memberUids)
+          && !(request.auth.uid in request.resource.data.memberUids);
       }
     }
   }

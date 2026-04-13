@@ -125,6 +125,7 @@ const PartyForm = ({ onClose }) => {
             photoURL: user.photoURL ?? "",
           },
         ],
+        memberUids: [user.uid],
         hostUid: user.uid,
         hostName: user.displayName ?? "익명",
         status: "open",
